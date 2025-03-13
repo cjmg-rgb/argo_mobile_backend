@@ -1,0 +1,21 @@
+meta {
+  name: Create user
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{domain}}/api/admin/users
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "John@email.com",
+    "name": "John Doe",
+    "password": "examplepassword",
+    "role": "admin",
+    "departmentId": "a268f83f-264e-409c-8f9b-c25f9fee24d2"
+  }
+}

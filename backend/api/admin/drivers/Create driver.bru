@@ -1,0 +1,20 @@
+meta {
+  name: Create driver
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{domain}}/api/admin/drivers
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "driver@email.com",
+    "password": "driver.primecorp",
+    "number": "09616704384",
+    "name": "Driver John Doe"
+  }
+}

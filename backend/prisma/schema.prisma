@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id           String     @id @default(uuid())
+  email        String
+  password     String
+  name         String
+  credits      Int        @default(50)
+  departmentId String
+  department   department @relation(fields: [departmentId], references: [id])
+  role         Role
+  bookings     booking[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  isArchived   Boolean    @default(false)
+
+  @@index([name, email])
+  @@map("users")
+}
+
+model department {
+  id             String   @id @default(uuid())
+  name           String
+  credits        Int      @default(50)
+  deparmentUsers user[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  isArchived     Boolean  @default(false)
+
+  @@index([name])
+  @@map("departments")
+}
+
+model colorTag {
+  id         String   @id @default(uuid())
+  label      String
+  isUsed     Boolean  @default(false)
+  car        car?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  isArchived Boolean  @default(false)
+
+  @@map("colorTags")
+}
+
+model car {
+  id          String    @id @default(uuid())
+  model       String
+  plateNumber String
+  codingDay   Int
+  colorTagId  String    @unique
+  colorTag    colorTag  @relation(fields: [colorTagId], references: [id])
+  bookings    booking[]
+  driverId    String?   @unique
+  driver      driver?   @relation(fields: [driverId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isArchived  Boolean   @default(false)
+
+  @@map("cars")
+}
+
+model driver {
+  id         String   @id @default(uuid())
+  email      String
+  password   String
+  name       String
+  number     String
+  car        car?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  isArchived Boolean  @default(false)
+
+  @@unique([email, isArchived])
+  @@index([email, name])
+  @@map("drivers")
+}
+
+model booking {
+  id              String   @id @default(uuid())
+  title           String
+  location        String
+  date            DateTime
+  pickUpTime      DateTime
+  dropOffTime     DateTime
+  instruction     String
+  creditDeduction Int
+  carId           String
+  car             car      @relation(fields: [carId], references: [id])
+  bookedById      String
+  bookedBy        user     @relation(fields: [bookedById], references: [id])
+  editAttempts    Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  isArchived      Boolean  @default(false)
+
+  @@index([title])
+  @@map("bookings")
+}
+
+enum Role {
+  user
+  admin
+}

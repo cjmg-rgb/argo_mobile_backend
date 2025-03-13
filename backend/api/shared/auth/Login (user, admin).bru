@@ -1,0 +1,18 @@
+meta {
+  name: Login (user, admin)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{domain}}/api/shared/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "it.primecorp@email.com",
+    "password": "it.prime****"
+  }
+}
