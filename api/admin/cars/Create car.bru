@@ -1,0 +1,19 @@
+meta {
+  name: Create car
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{domain}}/api/admin/cars
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "model": "Toyota Innova",
+    "plateNumber": "123-456-789",
+    "colorTagId": "047a1fb2-0e89-4962-8292-20c51da0c6bc"
+  }
+}
